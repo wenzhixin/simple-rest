@@ -12,7 +12,7 @@ The Simple-REST is licensed under the Apache Licence, Version 2.0
 Usage
 -----
 
-- GET /users?limit=20&offset=0
+**GET /users?limit=20&offset=0 **
 
 	class Controllers_Users extends RestController {
 		public function get() {
@@ -38,9 +38,9 @@ Usage
 		}
 	}
 	
-- GET /user/param1/param2
+**GET /user/param1/param2 **
 
-- POST /user/ 
+**POST /user/ **
 
 	Content-type: application/json
 	{
@@ -48,7 +48,7 @@ Usage
 		"password": "password"
 	}
 
-- PUT /user/1 
+**PUT /user/1 **
 
 	Content-type: application/json
 	{
@@ -56,7 +56,7 @@ Usage
 		"password": "password"
 	}
 	
-- DELETE /user/1 
+**DELETE /user/1 **
 
 	class Controllers_User extends RestController {
 		public function get() {
