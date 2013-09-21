@@ -1,4 +1,3 @@
-<?php
 /*
  * Copyright 2011 <http://voidweb.com>.
  * Author: Deepesh Malviya <https://github.com/deepeshmalviya>.
@@ -18,6 +17,7 @@
  * under the License. 
  */
 
+<?php
 /**
  * Class implements RESTfulness
  */
@@ -41,24 +41,24 @@ class Rest {
 	 * and populates them to class variables. 
 	 */
 	private function processRequest() {
-		$this->request['resource'] = (isset($_GET['RESTurl']) && !empty($_GET['RESTurl'])) ? $_GET['RESTurl'] : 'index';
-		unset($_GET['RESTurl']);
+		$url = (isset($_GET['url']) && !empty($_GET['url'])) ? $_GET['url'] : 'index';
+		$urls = explode('/', $url);
+		array_shift($urls);
+		$this->request['resource'] = array_shift($urls);
+		$this->request['params'] = $urls;
+		unset($_GET['url']);
+		
 		$this->request['method'] = strtolower($_SERVER['REQUEST_METHOD']);
 		$this->request['headers'] = $this->getHeaders();
 		$this->request['format'] = isset($_GET['format']) ? trim($_GET['format']) : null;
 		switch($this->request['method']) {
 			case 'get':
-				$this->request['params'] = $_GET;
+				$this->request['data'] = $_GET;
 				break;
 			case 'post':
-				$this->request['params'] = array_merge($_POST, $_GET);
-				break;
 			case 'put':
-				parse_str(file_get_contents('php://input'), $this->request['params']);
+				$this->request['data'] = json_decode(file_get_contents('php://input'), true);
             	break;
-			case 'delete':
-				$this->request['params'] = $_GET;
-				break;
 			default:
 				break;
 		}
