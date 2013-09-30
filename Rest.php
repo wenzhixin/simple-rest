@@ -1,26 +1,10 @@
-/*
- * Copyright 2011 <http://voidweb.com>.
- * Author: Deepesh Malviya <https://github.com/deepeshmalviya>.
- * 
- * Simple-REST - Lightweight PHP REST Library
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain
- * a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License. 
- */
-
 <?php
 /**
  * Class implements RESTfulness
  */
+
+require_once 'wp-load.php';
+ 
 class Rest {
 	
 	private $request = array(); // Array storing request
@@ -41,10 +25,12 @@ class Rest {
 	 * and populates them to class variables. 
 	 */
 	private function processRequest() {
-		$url = (isset($_GET['url']) && !empty($_GET['url'])) ? $_GET['url'] : 'index';
+		$url = $_GET['url'];
 		$urls = explode('/', $url);
-		array_shift($urls);
 		$this->request['resource'] = array_shift($urls);
+		if ($this->request['resource'] == '') {
+			$this->request['resource'] = array_shift($urls);
+		}
 		$this->request['params'] = $urls;
 		unset($_GET['url']);
 		
@@ -78,7 +64,7 @@ class Rest {
 	 */
 	public function process() {
 		try	{			
-			$controllerName = $this->getController();		
+			$controllerName = $this->getController();
 			if(null == $controllerName) {
 				throw new Exception('Method not allowed', 405);
 			}		
@@ -180,13 +166,8 @@ class Rest {
 	}
 
 	private function response() {
-		if(!empty($this->response)) {
-			$method = $this->request['content-type'] . 'Response';
-			$this->response = array('status' => $this->responseStatus, 'body' => $this->$method());
-		} else {
-			$this->request['content-type'] = 'qs';
-			$this->response = array('status' => $this->responseStatus, 'body' => $this->response);
-		}
+		$method = $this->request['content-type'] . 'Response';
+		$this->response = array('status' => $this->responseStatus, 'body' => $this->$method());
 		
 		return $this;
 	}

@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /simple-rest
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-s
+RewriteRule ^(.*)$ api.php?url=$1 [QSA,NC,L]
