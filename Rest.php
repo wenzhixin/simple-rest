@@ -2,8 +2,6 @@
 /**
  * Class implements RESTfulness
  */
-
-require_once 'wp-load.php';
  
 class Rest {
 	
